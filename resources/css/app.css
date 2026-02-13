@@ -1,0 +1,16 @@
+/* ===============================
+   CoreUI + Bootstrap Setup
+================================ */
+
+/* CoreUI */
+@import "@coreui/coreui/dist/css/coreui.min.css";
+
+/* Bootstrap Icons */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Simplebar */
+@import "simplebar/dist/simplebar.css";
+
+/* Your Template Styles (if copied) */
+@import "./style.css";
+@import "./examples.css";
