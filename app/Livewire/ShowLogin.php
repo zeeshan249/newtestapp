@@ -2,22 +2,21 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 class ShowLogin extends Component
 {
-    
     #[Title('Login')]
 
     #[Layout('components.layouts.app')]
-    
-    public $loginMessage='';
-     
+    public $loginMessage = '';
+
     #[On('login-failed')]
-    public function handleLoginFailed($message){
+    public function handleLoginFailed($message)
+    {
         $this->loginMessage = $message;
     }
 

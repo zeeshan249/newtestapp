@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TaskSeeder extends Seeder
 {
@@ -17,9 +16,9 @@ class TaskSeeder extends Seeder
 
         for ($i = 1; $i <= 500; $i++) {
             $tasks[] = [
-                'name' => 'Task ' . $i,
-                'email' => 'task' . $i . '@example.com',
-                'phone' => '90000000' . str_pad($i, 2, '0', STR_PAD_LEFT),
+                'name' => 'Task '.$i,
+                'email' => 'task'.$i.'@example.com',
+                'phone' => '90000000'.str_pad($i, 2, '0', STR_PAD_LEFT),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

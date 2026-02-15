@@ -12,22 +12,27 @@ class TotalCount extends Component
 {
     public $totalCount = 0;
 
-     #[On('articleDeleted')]
+    #[On('articleDeleted')]
     public function refreshCount()
     {
         // This method will run when event fires
-       // $this->totalCount = Task::count();
+        // $this->totalCount = Task::count();
         if ($this->totalCount > 0) {
             $this->totalCount--;
         }
     }
-    public function mount(){
-       
+
+    public function mount()
+    {
+
         $this->totalCount = Task::count();
     }
-    public function placeholder(){
+
+    public function placeholder()
+    {
         return view('livewire.count-placeholder');
     }
+
     public function render()
     {
         return view('livewire.total-count');

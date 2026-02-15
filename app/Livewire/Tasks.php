@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\Task;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -14,43 +15,48 @@ class Tasks extends AdminComponent
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap'; // important for Bootstrap
-    //public $tasks=[];
-    public $counter=1;
+
+    // public $tasks=[];
+    public $counter = 1;
+
     public $filter = '';
-    public $selectAll = false; 
+
+    public $selectAll = false;
 
     #[Validate('required')]
-    public $name='';
+    public $name = '';
 
     #[Validate('required|email')]
-    public $email='';
+    public $email = '';
 
     #[Validate('required|max:10|min:10')]
-    public $phone='';
+    public $phone = '';
 
-    public $taskId='';
-    public $task='';
+    public $taskId = '';
+
+    public $task = '';
 
     public $is_completed = false;
+
     public $has_multiple = false;
 
     public $notifications = [];
-    public $selectedTasks = []; 
 
-     public $currentPageIds = [];
-   
+    public $selectedTasks = [];
+
+    public $currentPageIds = [];
+
     #[On('statusChanged')]
-    
-   public function updateFilter($value)
+    public function updateFilter($value)
     {
         $this->filter = $value;
-      
+
         $this->resetPage();
     }
 
-    public function mount()  //This Method doesnt support pagination because it runs only once when the component is initialized. So we will fetch tasks in render method instead of mount method.
+    public function mount()  // This Method doesnt support pagination because it runs only once when the component is initialized. So we will fetch tasks in render method instead of mount method.
     {
-         $this->tasks=Task::select('*')->orderBy('created_at','desc')->get();
+        $this->tasks = Task::select('*')->orderBy('created_at', 'desc')->get();
     }
 
     public function strikeSelected()
@@ -62,71 +68,70 @@ class Tasks extends AdminComponent
         $this->selectAll = false;
     }
 
-    public function delete(Task $task){
+    public function delete(Task $task)
+    {
         $task->delete();
-        $this->resetPage();// Used Only when we are on the last page and we delete the last item of that page then it will automatically take us to the previous page because there is no item to show on the current page.
+        $this->resetPage(); // Used Only when we are on the last page and we delete the last item of that page then it will automatically take us to the previous page because there is no item to show on the current page.
         session()->flash('success', 'Task deleted successfully!');
-        $this->tasks=Task::select('*')->orderBy('created_at','desc')->get();
+        $this->tasks = Task::select('*')->orderBy('created_at', 'desc')->get();
         $this->dispatch('articleDeleted');
     }
 
+    public function editViewModal(Task $task)
+    {
 
-            public function editViewModal(Task $task){
-         
-         $this->taskId = $task->id;
+        $this->taskId = $task->id;
 
-            $this->name         = $task->name;
-            $this->email        = $task->email;
-            $this->phone        = $task->phone;
-            $this->is_completed = (bool) $task->is_completed;
-            $this->has_multiple = (bool) $task->has_multiple;
+        $this->name = $task->name;
+        $this->email = $task->email;
+        $this->phone = $task->phone;
+        $this->is_completed = (bool) $task->is_completed;
+        $this->has_multiple = (bool) $task->has_multiple;
 
-            $this->notifications = $task->has_multiple
-                ? json_decode($task->notifications, true) ?? []
-                : [];
+        $this->notifications = $task->has_multiple
+            ? json_decode($task->notifications, true) ?? []
+            : [];
 
-            // 🔥 OPEN MODAL PROGRAMMATICALLY
-         //   $this->dispatch('open-modal');
-            }
+        // 🔥 OPEN MODAL PROGRAMMATICALLY
+        //   $this->dispatch('open-modal');
+    }
 
-           public function updateModalData()
-{
-    $this->validate();
+    public function updateModalData()
+    {
+        $this->validate();
 
-    $task = Task::findOrFail($this->taskId);
+        $task = Task::findOrFail($this->taskId);
 
-    $task->update([
-        'name'         => $this->name,
-        'email'        => $this->email,
-        'phone'        => $this->phone,
-        'is_completed' => $this->is_completed,
-        'has_multiple' => $this->has_multiple,
-        'notifications'=> (!empty($this->notifications) && $this->has_multiple)
-            ? json_encode($this->notifications)
-            : null,
-    ]);
+        $task->update([
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'is_completed' => $this->is_completed,
+            'has_multiple' => $this->has_multiple,
+            'notifications' => (! empty($this->notifications) && $this->has_multiple)
+                ? json_encode($this->notifications)
+                : null,
+        ]);
 
-    session()->flash('success', 'Task updated successfully!');
+        session()->flash('success', 'Task updated successfully!');
 
-    // 🔥 Close modal
-    $this->dispatch('close-modal');
+        // 🔥 Close modal
+        $this->dispatch('close-modal');
 
-    // 🔥 Reset form (important)
-    $this->reset([
-        'taskId',
-        'name',
-        'email',
-        'phone',
-        'is_completed',
-        'has_multiple',
-        'notifications',
-    ]);
-}
-
-   
+        // 🔥 Reset form (important)
+        $this->reset([
+            'taskId',
+            'name',
+            'email',
+            'phone',
+            'is_completed',
+            'has_multiple',
+            'notifications',
+        ]);
+    }
 
     public function toggleSelectAll()
-    {  
+    {
         $this->selectAll = ! $this->selectAll;
 
         $this->selectedTasks = $this->selectAll
@@ -134,49 +139,46 @@ class Tasks extends AdminComponent
             : [];
     }
 
+    //    public function render()  //selecting all of the ids
+    // {
+    //     $query = Task::query();
 
-    
-//    public function render()  //selecting all of the ids
-// {
-//     $query = Task::query();
-  
-//     if ($this->filter == 'completed') {
-//         $query->where('is_completed', 1);
-//     }
+    //     if ($this->filter == 'completed') {
+    //         $query->where('is_completed', 1);
+    //     }
 
-//     if ($this->filter == 'pending') {
-//         $query->where('is_completed', 0);
-//     }
+    //     if ($this->filter == 'pending') {
+    //         $query->where('is_completed', 0);
+    //     }
 
-//     // return view('livewire.tasks',[        
-//     //  'tasks' => Task::orderBy('created_at','desc')->paginate(10)]);
-//     $this->currentPageIds = $query->pluck('id')->toArray();
-   
-//     return view('livewire.tasks', [
-//         'tasks' => $query->orderBy('created_at', 'desc')->paginate(10)
-//     ]);
-// }
+    //     // return view('livewire.tasks',[
+    //     //  'tasks' => Task::orderBy('created_at','desc')->paginate(10)]);
+    //     $this->currentPageIds = $query->pluck('id')->toArray();
 
-public function render()  //selecting only the ids of the current page
-{
-    $query = Task::query();
+    //     return view('livewire.tasks', [
+    //         'tasks' => $query->orderBy('created_at', 'desc')->paginate(10)
+    //     ]);
+    // }
 
-    if ($this->filter === 'completed') {
-        $query->where('is_completed', 1);
+    public function render()  // selecting only the ids of the current page
+    {
+        $query = Task::query();
+
+        if ($this->filter === 'completed') {
+            $query->where('is_completed', 1);
+        }
+
+        if ($this->filter === 'pending') {
+            $query->where('is_completed', 0);
+        }
+
+        $tasks = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        // Store current page IDs
+        $this->currentPageIds = $tasks->pluck('id')->toArray();
+
+        return view('livewire.tasks', [
+            'tasks' => $tasks,
+        ]);
     }
-
-    if ($this->filter === 'pending') {
-        $query->where('is_completed', 0);
-    }
-
-    $tasks = $query->orderBy('created_at', 'desc')->paginate(10);
-
-    // Store current page IDs
-    $this->currentPageIds = $tasks->pluck('id')->toArray();
-
-    return view('livewire.tasks', [
-        'tasks' => $tasks
-    ]);
-}
-
 }
