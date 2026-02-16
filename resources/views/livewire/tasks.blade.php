@@ -77,9 +77,10 @@
                     </a>
                        <a href="#"
                         class="text-primary me-3"
-                        wire:click="editViewModal({{ $article->id }})"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editModal"
+                        
+                        wire:click.prevent="editViewModal({{ $article->id }})"
+                        {{-- data-bs-toggle="modal"
+                        data-bs-target="#editModal" --}}
                         >
                             <i class="bi bi-gear"></i>
                         </a>
@@ -121,6 +122,9 @@
         <div wire:ignore.self class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            
+
+            
 
             <form wire:submit.prevent="updateModalData">
 
@@ -274,5 +278,10 @@
 
         </div>
     </div>
+
+    
+
+
+    
 </div>
 

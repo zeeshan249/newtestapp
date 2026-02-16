@@ -1,55 +1,21 @@
 // ===============================
-// Bootstrap
+// Bootstrap ONLY
 // ===============================
 import * as bootstrap from 'bootstrap'
-window.bootstrap = bootstrap
+window.bootstrap = bootstrap   // ⭐ REQUIRED for global access
 
-// ===============================
-// CoreUI
-// ===============================
-import * as coreui from '@coreui/coreui'
-window.coreui = coreui   // 🔥 VERY IMPORTANT
 
-// ===============================
-// Chart.js
-// ===============================
-import Chart from 'chart.js/auto'
-window.Chart = Chart     // 🔥 VERY IMPORTANT
+// =====================================================
+// 🔥 Livewire Modal Listener (BEST PRACTICE)
+// =====================================================
+document.addEventListener('livewire:init', () => {
+    Livewire.on('open-edit-modal', () => {
+        const modalEl = document.getElementById('editModal')
+        if (!modalEl) return
 
-// ===============================
-// CoreUI Chart Plugin
-// ===============================
-import '@coreui/chartjs'
-
-// ===============================
-// CoreUI Utils
-// ===============================
-import '@coreui/utils'
-
-// ===============================
-// Simplebar
-// ===============================
-import SimpleBar from 'simplebar'
-window.SimpleBar = SimpleBar
-
-// ===============================
-// Your custom JS
-// ===============================
-import './main'
-import './config'
-import './color-modes'
-
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.querySelector('.btn-close')
-    const sidebar = document.querySelector('#sidebar')
-
-    if (btn && sidebar) {
-        btn.addEventListener('click', () => {
-            const instance = coreui.Sidebar.getOrCreateInstance(sidebar)
-            instance.toggle()
-        })
-    }
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl)
+        modal.show()
+    })
 })
 
-
-console.log('All JS Loaded Correctly')
+console.log('Bootstrap JS Loaded ✔️')

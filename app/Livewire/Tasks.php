@@ -79,7 +79,7 @@ class Tasks extends AdminComponent
 
     public function editViewModal(Task $task)
     {
-
+      
         $this->taskId = $task->id;
 
         $this->name = $task->name;
@@ -93,7 +93,7 @@ class Tasks extends AdminComponent
             : [];
 
         // 🔥 OPEN MODAL PROGRAMMATICALLY
-        //   $this->dispatch('open-modal');
+           $this->dispatch('open-edit-modal');
     }
 
     public function updateModalData()
