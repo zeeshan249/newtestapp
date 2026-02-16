@@ -28,8 +28,20 @@
     </div>
     <div class="d-flex justify-content-end  mb-4">
 
+        
         <livewire:select-component />         
     </div>
+
+     <div class="container mt-4">
+    
+  <form class="d-flex">
+    <input class="form-control me-2" type="text" aria-label="Search"
+           wire:model.live.debounce="searchTerm"
+           placeholder="{{$placeholder??'Search...'}}"
+    >
+  </form>
+</div>
+
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover">
 
@@ -37,6 +49,7 @@
                 <tr>
                     <th>#</th>
                     <th><input type="checkbox"
+                     wire:model="selectedTasksAllCheck"
                      wire:click="toggleSelectAll"></th>
                     <th>Task Name</th>
                     <th>Task Email</th>
@@ -48,6 +61,7 @@
             </thead>
 
           <tbody>
+         
          @foreach ( $tasks as $article)
               <tr wire:key="{{ $article->id }}"
                 {{-- @class([

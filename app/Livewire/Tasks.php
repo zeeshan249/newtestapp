@@ -44,7 +44,16 @@ class Tasks extends AdminComponent
 
     public $selectedTasks = [];
 
+    public $selectedTasksAllCheck = false;
+
     public $currentPageIds = [];
+
+       #[Validate('required')]
+    
+    public $searchTerm = '';
+   
+
+    
 
     #[On('statusChanged')]
     public function updateFilter($value)
@@ -79,7 +88,7 @@ class Tasks extends AdminComponent
 
     public function editViewModal(Task $task)
     {
-      
+
         $this->taskId = $task->id;
 
         $this->name = $task->name;
@@ -93,7 +102,7 @@ class Tasks extends AdminComponent
             : [];
 
         // 🔥 OPEN MODAL PROGRAMMATICALLY
-           $this->dispatch('open-edit-modal');
+        $this->dispatch('open-edit-modal');
     }
 
     public function updateModalData()
@@ -171,14 +180,33 @@ class Tasks extends AdminComponent
         if ($this->filter === 'pending') {
             $query->where('is_completed', 0);
         }
+        if($this->searchTerm){
+            $searchTerm = "%{$this->searchTerm}%";
+            $query->where('email', 'LIKE', $searchTerm);
+        }
 
         $tasks = $query->orderBy('created_at', 'desc')->paginate(10);
 
         // Store current page IDs
         $this->currentPageIds = $tasks->pluck('id')->toArray();
 
+        // $this->toggleSelectAll();
         return view('livewire.tasks', [
             'tasks' => $tasks,
         ]);
+    }
+
+    //     public function updatedSelectedTasks()
+    // {      dd($this->selectedTasksAllCheck,$this->currentPageIds);
+    //     $this->selectAll =
+    //         count($this->selectedTasksAllCheck) === count($this->currentPageIds);
+    // }
+
+    public function updatingPage()
+    {
+        // dd($this->selectedTasksAllCheck);
+        $this->selectedTasksAllCheck = false;
+        $this->selectAll = false;
+        $this->selectedTasks = [];
     }
 }
