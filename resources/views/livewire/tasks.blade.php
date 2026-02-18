@@ -45,24 +45,24 @@
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover">
 
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th><input type="checkbox"
+                    <x-layouts.admin_components.table>
+                   <x-slot:thead>
+                    <x-layouts.admin_components.tableheading>#</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading><input type="checkbox"
                      wire:model="selectedTasksAllCheck"
-                     wire:click="toggleSelectAll"></th>
-                    <th>Task Name</th>
-                    <th>Task Email</th>
-                    <th>Task Phone</th>
-                    <th>Task Status</th>
-                    <th>Created Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+                     wire:click="toggleSelectAll"></x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading sortable  wire:click="sortBy('name')" :direction="$sortField == 'name' ? $sortDirection : null">Task Name</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading>Task Email</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading>Task Phone</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading>Task Status</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading>Created Date</x-layouts.admin_components.tableheading>
+                    <x-layouts.admin_components.tableheading>Action</x-layouts.admin_components.tableheading>
+                   </x-slot>
 
-          <tbody>
+                   <x-slot:tbody>
+                       <tbody>
          
-         @foreach ( $tasks as $article)
+               @foreach ( $tasks as $article)
               <tr wire:key="{{ $article->id }}"
                 {{-- @class([
                     'text-decoration-line-through bg-light'
@@ -111,6 +111,27 @@
 
 
         </tbody>  
+                   </x-slot>
+
+
+                    </x-layouts.admin_components.table>
+
+            {{-- <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th><input type="checkbox"
+                     wire:model="selectedTasksAllCheck"
+                     wire:click="toggleSelectAll"></th>
+                    <th>Task Name</th>
+                    <th>Task Email</th>
+                    <th>Task Phone</th>
+                    <th>Task Status</th>
+                    <th>Created Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead> --}}
+
+       
 
 
         </table>

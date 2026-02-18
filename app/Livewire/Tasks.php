@@ -46,6 +46,10 @@ class Tasks extends AdminComponent
 
     public $selectedTasksAllCheck = false;
 
+    public $sortField = 'name';
+
+    public $sortDirection = 'desc';
+
     public $currentPageIds = [];
 
        #[Validate('required')]
@@ -185,7 +189,16 @@ class Tasks extends AdminComponent
             $query->where('email', 'LIKE', $searchTerm);
         }
 
-        $tasks = $query->orderBy('created_at', 'desc')->paginate(10);
+        // ->orderBy($this->sortField, $this->sortDirection)
+
+        if($this->sortField){
+        $tasks = $query->orderBy($this->sortField, $this->sortDirection)->paginate(10);
+        }
+        else{
+          $tasks = $query->orderBy('created_at', 'desc')->paginate(10);
+        }
+
+  
 
         // Store current page IDs
         $this->currentPageIds = $tasks->pluck('id')->toArray();
@@ -208,5 +221,15 @@ class Tasks extends AdminComponent
         $this->selectedTasksAllCheck = false;
         $this->selectAll = false;
         $this->selectedTasks = [];
+    }
+
+       public function sortBy($field)
+    {
+        $this->sortField = $field;
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
     }
 }

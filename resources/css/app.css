@@ -14,3 +14,12 @@
 /* Your Template Styles (if copied) */
 @import "./style.css";
 @import "./examples.css";
+
+.table-sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+
+
